@@ -25,11 +25,16 @@ namespace Movies.services
         {
             var movies = repo.GetMovies();
 
-            var actorsWithRoles = from roleInMovie in RemoveDuplicateMovieMetadata(movies)
+            // normalize the data to remove duplicates and empty or null entries - this should normally be a business decision
+            var flattenedMovieMetadata = FlattenMovieMetadata(movies);
+            var removedEmptyOrNullEntries = RemoveEmptyOrNullEntries(flattenedMovieMetadata);
+            var removedDuplicates = RemoveDuplicateMovieMetadata(removedEmptyOrNullEntries);
+
+            var actorsWithRoles = from roleInMovie in removedDuplicates
                                   orderby roleInMovie.movieName
                                   group roleInMovie.roleName by roleInMovie.actorName;
 
-            // Original implementation that handles the non-duplicate cases:
+            // Original implementation that doesn't remove duplicates or empty entries:
             //var actorsWithRoles = from movie in movies
             //                      from role in movie.Roles.Select(role => new { movieName = movie.Name, actorName = role.Actor, roleName = role.Name })
             //                      orderby movie.Name
@@ -40,11 +45,25 @@ namespace Movies.services
             return result.ToList();
         }
 
-        private IList<RoleInMovie> RemoveDuplicateMovieMetadata(IList<MovieDto> movies)
+        private IEnumerable<RoleInMovie> FlattenMovieMetadata(IEnumerable<MovieDto> movies)
         {
-            var retVal = movies.SelectMany(movie => movie.Roles, (movie, role) => new RoleInMovie { movieName = movie.Name, actorName = role.Actor, roleName = role.Name })
-                            .Distinct();
-            return retVal.ToList<RoleInMovie>();
+            var retVal = movies.SelectMany(movie => movie.Roles, (movie, role) => new RoleInMovie { movieName = movie.Name, actorName = role.Actor, roleName = role.Name });
+            return retVal;
+        }
+
+        private IEnumerable<RoleInMovie> RemoveEmptyOrNullEntries(IEnumerable<RoleInMovie> movies)
+        {
+            var retVal = movies.Where(roleInMovie => 
+                !string.IsNullOrWhiteSpace(roleInMovie.movieName) &&
+                !string.IsNullOrWhiteSpace(roleInMovie.actorName) &&
+                !string.IsNullOrWhiteSpace(roleInMovie.roleName));
+            return retVal;
+        }
+
+        private IEnumerable<RoleInMovie> RemoveDuplicateMovieMetadata(IEnumerable<RoleInMovie> movies)
+        {
+            var retVal = movies.Distinct();
+            return retVal;
         }
     }
 }

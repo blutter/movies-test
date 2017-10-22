@@ -21,13 +21,11 @@ namespace Movies.services
             var movies = repo.GetMovies();
 
             var actorsWithRoles = from movie in movies
-                                  from role in movie.Roles
-                                  select new { movieName = movie.Name, actorName = role.Actor, roleName = role.Name };
-            var rolesGroupedByActors = from actorWithRole in actorsWithRoles
-                                       orderby actorWithRole.movieName
-                                       group actorWithRole.roleName by actorWithRole.actorName;
+                                  from role in movie.Roles.Select(role => new { movieName = movie.Name, actorName = role.Actor, roleName = role.Name })
+                                  orderby movie.Name
+                                  group role.roleName by role.actorName;
 
-            var result = rolesGroupedByActors.Select((group) => new ActorsWithRolesModel(group.Key, group.ToList()));
+            var result = actorsWithRoles.Select((group) => new ActorsWithRolesModel(group.Key, group.ToList()));
 
             return result.ToList();
         }

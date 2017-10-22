@@ -24,11 +24,22 @@ namespace Movies.repositories
         public IList<MovieDto> GetMovies()
         {
             var result = new List<MovieDto>();
-            var response = HttpClient.GetAsync(MoviesUri).Result;
-
-            if (response.IsSuccessStatusCode)
+            try
             {
-                result = JsonConvert.DeserializeObject<List<MovieDto>>(response.Content.ReadAsStringAsync().Result);
+                var response = HttpClient.GetAsync(MoviesUri).Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    result = JsonConvert.DeserializeObject<List<MovieDto>>(response.Content.ReadAsStringAsync().Result);
+                }
+                else
+                {
+                    throw new Exception($"Error accessing api. Error code: {response.StatusCode}, {response.ReasonPhrase}");
+                }
+            }
+            catch (Exception e)
+            {
+                throw;
             }
 
             return result;

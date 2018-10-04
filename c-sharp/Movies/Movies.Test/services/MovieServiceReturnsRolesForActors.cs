@@ -1,13 +1,12 @@
-﻿using FluentAssertions;
+﻿using FizzWare.NBuilder;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Movies.contracts;
 using Movies.models;
 using Movies.services;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using TestStack.BDDfy;
 
 namespace Movies.Test.services
@@ -31,13 +30,13 @@ namespace Movies.Test.services
             mockRepo = new Mock<IMoviesRepository>();
             var moviesWithRoles = new List<MovieDto>
             {
-                new MovieDto {
-                    Name = "Rom Com",
-                    Roles = new List<RoleDto> {
-                        new RoleDto { Actor = "actor Q", Name = "HuckleBerry" },
-                        new RoleDto { Actor = "actor Y", Name = "Finn"}
-                    }
-                },
+                Builder<MovieDto>.CreateNew()
+                    .With(dto => dto.Name = "Rom Com")
+                    .And(dto => dto.Roles = Builder<RoleDto>.CreateListOfSize(2)
+                        .TheFirst(1).With(role => role.Actor = "actor Q").And(role => role.Name = "HuckleBerry")
+                        .TheNext(1).With(role => role.Actor = "actor Y").And(role => role.Name = "Finn")
+                        .Build())
+                    .Build(),
                 new MovieDto
                 {
                     Name = "Comedy 1",

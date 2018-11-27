@@ -1,0 +1,27 @@
+Configuration: 
+Graph: 
+Help: 
+Host:
+- AppVeyor
+- Bitrise
+- Console
+- GitLab
+- Jenkins
+- TeamCity
+- TeamServices
+- Travis
+Root: 
+Skip:
+- Clean
+- Compile
+- Restore
+Solution: 
+Target:
+- Clean
+- Compile
+- Restore
+Verbosity:
+- Minimal
+- Normal
+- Quiet
+- Verbose

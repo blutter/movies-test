@@ -9,12 +9,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Movies.Test", "Movies.Test\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoviesDriver", "MoviesDriver\MoviesDriver.csproj", "{AF3FED78-627B-4AE7-880A-6DB0ECD45CB9}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "..\..\build\_build.csproj", "{4463E2F5-AF41-410D-9F30-59F6AB218ACD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4463E2F5-AF41-410D-9F30-59F6AB218ACD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4463E2F5-AF41-410D-9F30-59F6AB218ACD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E74A55B-15CA-48D4-AE19-0D8A3C4AC9B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9E74A55B-15CA-48D4-AE19-0D8A3C4AC9B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E74A55B-15CA-48D4-AE19-0D8A3C4AC9B3}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -17,6 +17,7 @@ class Build : NukeBuild
     readonly string Configuration = IsLocalBuild ? "Debug" : "Release";
 
     [Solution("c-sharp/Movies/Movies.sln")] readonly Solution Solution;
+    // [Project("c-sharp/Movies.Test/Movies.Test.csproj")] readonly Project TestProject;
     [GitRepository] readonly GitRepository GitRepository;
 
     AbsolutePath OutputDirectory => RootDirectory / "output";
@@ -45,4 +46,12 @@ class Build : NukeBuild
                 .EnableNoRestore());
         });
     
+    Target Test => _ => _
+        .DependsOn(Compile)
+        .Executes(() =>
+        {
+            DotNetTest(s => s
+                .SetProjectFile("c-sharp/Movies/Movies.Test/Movies.Test.csproj")
+                .SetConfiguration(Configuration));
+        });
 }
